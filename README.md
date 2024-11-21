@@ -33,10 +33,55 @@ Jalankan migrasi database dan seeder untuk data awal:
 ```sh
     php artisan migrate --seed
 ```
-5. Jalankan Server
+5. Generate Dokumentasi Swagger
+L5 Swagger memerlukan perintah berikut untuk menghasilkan file dokumentasi:
+```sh
+    php artisan l5-swagger:generate
+```
+6. Jalankan Server
 ```sh
     php artisan serve
 ```
+7. Akses Swagger UI 
+```sh
+    http://localhost:8000/api/documentation
+```
+
+## Menjalankan Unit Test
+
+Pastikan langkah-langkah diatas telah terinstal, setelah itu:
+
+1. Menjalankan Pengujian
+```sh
+    php artisan test
+```
+2. Hasil Contoh Pengujian
+```sh
+    PASS  Tests\Unit\ExampleTest
+    ✓ example
+
+    PASS  Tests\Feature\ApprovalStageTest
+    ✓ it requires approver id to be not empty or null
+    ✓ it requires approver id to be unique when adding approver
+    ✓ it can create an approver with unique name
+    ✓ update approval stage
+    ✓ update approval stage invalid approver
+
+    PASS  Tests\Feature\ApproverTest
+    ✓ it requires name to be not empty or null
+    ✓ it requires name to be unique when adding approver
+    ✓ it can create an approver with unique name
+
+    PASS  Tests\Feature\ExampleTest
+    ✓ example
+
+    PASS  Tests\Feature\ExpenseTest
+    ✓ expense approval process
+
+    Tests:  11 passed
+    Time:   1.34s
+```
+
 
 
 ### Premium Partners

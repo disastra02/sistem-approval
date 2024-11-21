@@ -2,20 +2,24 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Facades\Artisan;
 use Tests\TestCase;
+use Database\Seeders\StatusTableSeeder;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ExpenseTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(StatusTableSeeder::class);
+    }
+
     public function test_expense_approval_process()
     {
-        // Menjalankan seeder yang diperlukan
-        Artisan::call('db:seed', ['--class' => 'StatusTableSeeder']);
-
         // **Step 1**: Buat approver (Ana, Ani, Ina)
         $responseAna = $this->postJson('/api/approvers', ['name' => 'Ana']);
         $responseAni = $this->postJson('/api/approvers', ['name' => 'Ani']);
