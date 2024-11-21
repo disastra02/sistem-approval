@@ -597,7 +597,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID of the approval stage to update",
+                        "description": "ID of the expense to approve",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -739,7 +739,7 @@
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "ID of the approval stage to update",
+                        "description": "ID of the expense",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -747,8 +747,8 @@
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Successful response",
+                    "200": {
+                        "description": "Data expense berhasil diambil",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -759,66 +759,69 @@
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "Data approval stage berhasil ditambahkan"
+                                            "example": "Data expanse berhasil diambil"
                                         },
                                         "data": {
                                             "properties": {
-                                                "approver_id": {
-                                                    "type": "string",
-                                                    "example": "1"
-                                                },
-                                                "updated_at": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2024-11-21T04:06:16.000000Z"
-                                                },
-                                                "created_at": {
-                                                    "type": "string",
-                                                    "format": "date-time",
-                                                    "example": "2024-11-21T04:06:16.000000Z"
-                                                },
                                                 "id": {
                                                     "type": "integer",
                                                     "example": 1
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Validation error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "errors": {
-                                            "properties": {
-                                                "approver_id": {
-                                                    "type": "array",
-                                                    "items": {
-                                                        "type": "string"
-                                                    },
-                                                    "example": [
-                                                        "The approver id field is required.",
-                                                        "The selected approver id is invalid."
-                                                    ]
                                                 },
-                                                "message": {
+                                                "amount": {
+                                                    "type": "number",
+                                                    "format": "integer",
+                                                    "example": 10
+                                                },
+                                                "status": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 2
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "Disetujui"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "approvals": {
                                                     "type": "array",
                                                     "items": {
-                                                        "type": "string"
-                                                    },
-                                                    "example": [
-                                                        "Tahap approval sudah dilakukan.",
-                                                        "Tahap approval tidak sesuai.",
-                                                        "Tidak ada tahap approval yang tersisa.",
-                                                        "Internal server error."
-                                                    ]
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer",
+                                                                "example": 1
+                                                            },
+                                                            "approver": {
+                                                                "properties": {
+                                                                    "id": {
+                                                                        "type": "integer",
+                                                                        "example": 1
+                                                                    },
+                                                                    "name": {
+                                                                        "type": "string",
+                                                                        "example": "Ana"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            },
+                                                            "status": {
+                                                                "properties": {
+                                                                    "id": {
+                                                                        "type": "integer",
+                                                                        "example": 2
+                                                                    },
+                                                                    "name": {
+                                                                        "type": "string",
+                                                                        "example": "Disetujui"
+                                                                    }
+                                                                },
+                                                                "type": "object"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    }
                                                 }
                                             },
                                             "type": "object"

@@ -133,7 +133,7 @@ class ExpenseController extends Controller
      *         name="id",
      *         in="path",
      *         required=true,
-     *         description="ID of the approval stage to update",
+     *         description="ID of the expense to approve",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\RequestBody(
@@ -232,75 +232,44 @@ class ExpenseController extends Controller
      *         name="id",
      *         in="path",
      *         required=true,
-     *         description="ID of the approval stage to update",
+     *         description="ID of the expense",
      *         @OA\Schema(type="integer")
      *     ),
      *    @OA\Response(
      *         response=200,
-     *         description="Expense details retrieved successfully",
+     *         description="Data expense berhasil diambil",
      *         @OA\JsonContent(
      *             type="object",
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Data expanse berhasil diambil"),
      *             @OA\Property(
-     *                 property="id",
-     *                 type="integer",
-     *                 example=1
-     *             ),
-     *             @OA\Property(
-     *                 property="amount",
-     *                 type="number",
-     *                 format="float",
-     *                 example=10
-     *             ),
-     *             @OA\Property(
-     *                 property="status",
+     *                 property="data",
      *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="amount", type="number", format="integer", example=10),
      *                 @OA\Property(
-     *                     property="id",
-     *                     type="integer",
-     *                     example=2
+     *                     property="status",
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer", example=2),
+     *                     @OA\Property(property="name", type="string", example="Disetujui")
      *                 ),
      *                 @OA\Property(
-     *                     property="name",
-     *                     type="string",
-     *                     example="Disetujui"
-     *                 )
-     *             ),
-     *             @OA\Property(
-     *                 property="approvals",
-     *                 type="array",
-     *                 @OA\Items(
-     *                     type="object",
-     *                     @OA\Property(
-     *                         property="id",
-     *                         type="integer",
-     *                         example=1
-     *                     ),
-     *                     @OA\Property(
-     *                         property="approver",
+     *                     property="approvals",
+     *                     type="array",
+     *                     @OA\Items(
      *                         type="object",
+     *                         @OA\Property(property="id", type="integer", example=1),
      *                         @OA\Property(
-     *                             property="id",
-     *                             type="integer",
-     *                             example=1
+     *                             property="approver",
+     *                             type="object",
+     *                             @OA\Property(property="id", type="integer", example=1),
+     *                             @OA\Property(property="name", type="string", example="Ana")
      *                         ),
      *                         @OA\Property(
-     *                             property="name",
-     *                             type="string",
-     *                             example="Ana"
-     *                         )
-     *                     ),
-     *                     @OA\Property(
-     *                         property="status",
-     *                         type="object",
-     *                         @OA\Property(
-     *                             property="id",
-     *                             type="integer",
-     *                             example=2
-     *                         ),
-     *                         @OA\Property(
-     *                             property="name",
-     *                             type="string",
-     *                             example="Disetujui"
+     *                             property="status",
+     *                             type="object",
+     *                             @OA\Property(property="id", type="integer", example=2),
+     *                             @OA\Property(property="name", type="string", example="Disetujui")
      *                         )
      *                     )
      *                 )
@@ -323,7 +292,11 @@ class ExpenseController extends Controller
      */
     public function show($id)
     {
-        $expense = $this->expenseRepository->getById($id);
-        return response()->json($expense);
+        try {
+            $expense = $this->expenseRepository->getById($id);
+            return new ExpenseResource(true, 'Data expanse berhasil diambil', $expense);
+        } catch (\Exception $e) {
+            throw new HttpResponseException(response(["errors" => ['message' => 'Data not found']], 404));
+        }
     }
 }
