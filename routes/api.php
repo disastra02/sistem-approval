@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ApprovalStageController;
 use App\Http\Controllers\Api\ApproverController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,3 +21,6 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::post('approvers', [ApproverController::class, 'store']);
+
+Route::post('approval-stages', [ApprovalStageController::class, 'store']);
+Route::put('approval-stages/{id}', [ApprovalStageController::class, 'update']);

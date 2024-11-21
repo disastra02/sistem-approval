@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class ApproverRequest extends FormRequest
+class ApprovalStageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +26,7 @@ class ApproverRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:approvers'
+            'approver_id' => 'required|exists:approvers,id|unique:approval_stages,approver_id|integer'
         ];
     }
 

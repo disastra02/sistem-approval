@@ -9,12 +9,6 @@ use App\Http\Resources\ApproverResource;
 use App\Repositories\Interfaces\ApproverRepositoryInterface;
 
 /**
- * @OA\Info(
- *     version="1.0.0",
- *     title="Api Documentation Sistem Approval",
- *     description="Swagger API documentation for approval system",
- * )
- *
  * @OA\Tag(
  *     name="Approvers",
  *     description="API Endpoints for Approvers"
@@ -59,12 +53,12 @@ class ApproverController extends Controller
      *                 @OA\Property(property="name", type="string", example="Ana"),
      *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2024-11-21T04:06:16.000000Z"),
      *                 @OA\Property(property="created_at", type="string", format="date-time", example="2024-11-21T04:06:16.000000Z"),
-     *                 @OA\Property(property="id", type="integer", example=6)
+     *                 @OA\Property(property="id", type="integer", example=1)
      *             )
      *         )
      *     ),
      *     @OA\Response(
-     *         response=400,
+     *         response=422,
      *         description="Validation error",
      *         @OA\JsonContent(
      *             type="object",
@@ -87,7 +81,11 @@ class ApproverController extends Controller
      */
     public function store(ApproverRequest $request)
     {
-        $approver = $this->approverRepository->create($request->all());
-        return new ApproverResource(true, 'Data approvers berhasil ditambahkan', $approver);
+        try {
+            $approver = $this->approverRepository->create($request->all());
+            return new ApproverResource(true, 'Data approvers berhasil ditambahkan', $approver);
+        } catch (\Exception $e) {
+            return new ApproverResource(false, 'Data approvers gagal ditambahkan', []);
+        }
     }
 }
