@@ -18,6 +18,25 @@ Ikuti langkah-langkah berikut untuk menginstal aplikasi ini.
 ```sh
     git clone https://github.com/disastra02/sistem-approval.git
 ```
+2. Install Dependensi
+```sh
+    composer install
+```
+3. Konfigurasi
+Salin file .env.example menjadi .env dan atur konfigurasi database:
+```sh
+    cp .env.example .env
+    php artisan key:generate
+```
+4. Migrasi dan Seeder
+Jalankan migrasi database dan seeder untuk data awal:
+```sh
+    php artisan migrate --seed
+```
+5. Jalankan Server
+```sh
+    php artisan serve
+```
 
 
 ### Premium Partners
