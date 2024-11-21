@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ApprovalStageRequest;
 use App\Http\Resources\ApprovalStageResource;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Repositories\Interfaces\ApprovalStageRepositoryInterface;
-use Illuminate\Http\Request;
 
 /**
  * @OA\Tag(
@@ -77,6 +79,30 @@ class ApprovalStageController extends Controller
      *                 )
      *             )
      *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Data Not Found",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 @OA\Property(property="message", type="string", example="Data not found")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 @OA\Property(property="message", type="string", example="Internal server error")
+     *             )
+     *         )
      *     )
      * )
      */
@@ -86,7 +112,11 @@ class ApprovalStageController extends Controller
             $approver = $this->approvalStageRepository->create($request->all());
             return new ApprovalStageResource(true, 'Data approval stage berhasil ditambahkan', $approver);
         } catch (\Exception $e) {
-            return new ApprovalStageResource(false, 'Data approval stage gagal ditambahkan', []);
+            if ($e instanceof ModelNotFoundException) {
+                throw new HttpResponseException(response(["errors" => ['message' => 'Data not found']], 404));
+            }
+            
+            throw new HttpResponseException(response(["errors" => ['message' => 'Internal server error']], 500));
         }
     }
 
@@ -152,6 +182,30 @@ class ApprovalStageController extends Controller
      *                 )
      *             )
      *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Data Not Found",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 @OA\Property(property="message", type="string", example="Data not found")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 @OA\Property(property="message", type="string", example="Internal server error")
+     *             )
+     *         )
      *     )
      * )
      */
@@ -161,7 +215,11 @@ class ApprovalStageController extends Controller
             $approver = $this->approvalStageRepository->update($id, $request->all());
             return new ApprovalStageResource(true, 'Data approval stage berhasil diperbarui', $approver);
         } catch (\Exception $e) {
-            return new ApprovalStageResource(false, 'Data approval stage tidak ditemukan', []);
+            if ($e instanceof ModelNotFoundException) {
+                throw new HttpResponseException(response(["errors" => ['message' => 'Data not found']], 404));
+            }
+
+            throw new HttpResponseException(response(["errors" => ['message' => 'Internal server error']], 500));
         }
     }
 }

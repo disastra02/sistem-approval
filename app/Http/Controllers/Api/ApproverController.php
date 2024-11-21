@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ApproverRequest;
 use App\Http\Resources\ApproverResource;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Repositories\Interfaces\ApproverRepositoryInterface;
 
 /**
@@ -76,6 +78,30 @@ class ApproverController extends Controller
      *                 )
      *             )
      *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Data Not Found",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 @OA\Property(property="message", type="string", example="Data not found")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal Server Error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 @OA\Property(property="message", type="string", example="Internal server error")
+     *             )
+     *         )
      *     )
      * )
      */
@@ -85,7 +111,11 @@ class ApproverController extends Controller
             $approver = $this->approverRepository->create($request->all());
             return new ApproverResource(true, 'Data approvers berhasil ditambahkan', $approver);
         } catch (\Exception $e) {
-            return new ApproverResource(false, 'Data approvers gagal ditambahkan', []);
+            if ($e instanceof ModelNotFoundException) {
+                throw new HttpResponseException(response(["errors" => ['message' => 'Data not found']], 404));
+            }
+            
+            throw new HttpResponseException(response(["errors" => ['message' => 'Internal server error']], 500));
         }
     }
 }
