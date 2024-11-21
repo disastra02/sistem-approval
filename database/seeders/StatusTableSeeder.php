@@ -17,7 +17,7 @@ class StatusTableSeeder extends Seeder
         $dataStatus = ['Menunggu Persetujuan', 'Disetujui'];
 
         foreach ($dataStatus as $data) {
-            Status::create(['name' => $data]);
+            Status::updateOrInsert(['name' => $data]);
         }
     }
 }
